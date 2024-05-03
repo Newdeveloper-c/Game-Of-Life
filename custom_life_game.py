@@ -57,36 +57,38 @@ def update_field():
         for y in range(rows):
             count_yellow, count_green = count_neighbors(x, y)
             if field[y][x] == 1:
-                if races[y][x] == YELLOW_RACE:  # Если клетка желтая
-                    if count_green > count_yellow:
-                        new_field[y][x] = 1
-                        races[y][x] = GREEN_RACE
-                    elif count_yellow < 2 or count_yellow > 3:
-                        new_field[y][x] = 0
-                        races[y][x] = NO_RACE
-                else:
+                if races[y][x] == GREEN_RACE:  # Если клетка желтая
                     if count_yellow > count_green:
                         new_field[y][x] = 1
                         races[y][x] = YELLOW_RACE
                     elif count_green < 2 or count_green > 3:
                         new_field[y][x] = 0
                         races[y][x] = NO_RACE
-            else:
-                if(count_green == 0 or count_yellow == 0):
-                    if(count_yellow == 3):
-                        new_field[y][x] = 1
-                        races[y][x] = YELLOW_RACE
-                    elif(count_green == 3):
+                else:
+                    if count_green > count_yellow:
                         new_field[y][x] = 1
                         races[y][x] = GREEN_RACE
-                elif count_yellow == count_green:  # Если соседей у обеих рас одинаково
-                    continue
+                    elif count_yellow < 2 or count_yellow > 3:
+                        new_field[y][x] = 0
+                        races[y][x] = NO_RACE
+            else:
+                if(count_green == 0 or count_yellow == 0):
+                    if (count_green == 3):
+                        new_field[y][x] = 1
+                        races[y][x] = GREEN_RACE
+                    elif(count_yellow == 3):
+                        new_field[y][x] = 1
+                        races[y][x] = YELLOW_RACE
+                # elif count_yellow == count_green:  # Если соседей у обеих рас одинаково
+                #     continue
                 elif count_yellow > count_green:
                     races[y][x] = YELLOW_RACE
                     new_field[y][x] = 1
-                else:
+                elif count_yellow < count_green:
                     races[y][x] == GREEN_RACE
                     new_field[y][x] = 1
+                else:
+                    continue
 
     field = new_field
 
@@ -136,8 +138,8 @@ field[GREEN_START_POINT[1]][GREEN_START_POINT[0]] = 1
 # create random start points for each race
 NUMBER_OF_RACE_ANKLAVS = 5
 for z in range(NUMBER_OF_RACE_ANKLAVS):
-    YELLOW_START_POINT = [np.random.randint(0, rows - CELLS_SQUARE_SIZE), np.random.randint(0, cols - CELLS_SQUARE_SIZE)]
-    GREEN_START_POINT = [np.random.randint(0, rows - CELLS_SQUARE_SIZE), np.random.randint(0, cols - CELLS_SQUARE_SIZE)]
+    YELLOW_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(0, cols//2 - CELLS_SQUARE_SIZE)]
+    GREEN_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(cols//2, cols - CELLS_SQUARE_SIZE)]
 
     # create the race squares
     for x in range(YELLOW_START_POINT[0], YELLOW_START_POINT[0] + CELLS_SQUARE_SIZE):

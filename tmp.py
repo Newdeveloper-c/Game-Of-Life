@@ -67,12 +67,27 @@ def update_field():
                     new_field[y][x] = 0
                     races[y][x] = -1
             else:
-                if count_yellow == 3:
-                    new_field[y][x] = 1
+                # if count_yellow == 3:
+                #     new_field[y][x] = 1
+                #     races[y][x] = YELLOW_RACE
+                # elif count_green == 3:
+                #     new_field[y][x] = 1
+                #     races[y][x] = GREEN_RACE
+                if (count_green == 0 or count_yellow == 0):
+                    if (count_yellow == 3):
+                        new_field[y][x] = 1
+                        races[y][x] = YELLOW_RACE
+                    elif (count_green == 3):
+                        new_field[y][x] = 1
+                        races[y][x] = GREEN_RACE
+                # elif count_yellow == count_green:  # Если соседей у обеих рас одинаково
+                #     continue
+                elif count_yellow > count_green:
                     races[y][x] = YELLOW_RACE
-                elif count_green == 3:
                     new_field[y][x] = 1
-                    races[y][x] = GREEN_RACE
+                else:
+                    races[y][x] == GREEN_RACE
+                    new_field[y][x] = 1
 
     field = new_field
 
