@@ -32,8 +32,9 @@ races = np.full((rows, cols), NO_RACE)
 # Константы для начальных точек и количества клеток для каждой расы
 YELLOW_START_POINT = [10, 35]
 GREEN_START_POINT = [30, 35]
+
 #NUM_CELLS_PER_RACE = 35
-CELLS_SQUARE_SIZE = 10
+
 
 # Определение коэффэциентов
 ## Коэффициент вероятности рождения
@@ -88,8 +89,6 @@ def update_field():
                     elif(count_yellow >= k3_min and count_yellow <= k3_max):
                         new_field[y][x] = 1
                         races[y][x] = YELLOW_RACE
-                # elif count_yellow == count_green:  # Если соседей у обеих рас одинаково
-                #     continue
                 elif count_yellow > count_green:
                     races[y][x] = YELLOW_RACE
                     new_field[y][x] = 1
@@ -116,22 +115,15 @@ def count_neighbors(x, y):
                 count_green += k * field[row][col]
     return count_yellow, count_green
 
-# Установка начальных точек и клеток для каждой расы
-field[YELLOW_START_POINT[1]][YELLOW_START_POINT[0]] = 1
-field[GREEN_START_POINT[1]][GREEN_START_POINT[0]] = 1
-# for _ in range(NUM_CELLS_PER_RACE):
-#     cell_x = np.random.randint(max(0, YELLOW_START_POINT[0] - 2), min(cols, YELLOW_START_POINT[0] + 3))
-#     cell_y = np.random.randint(max(0, YELLOW_START_POINT[1] - 2), min(rows, YELLOW_START_POINT[1] + 3))
-#     field[cell_y][cell_x] = 1
-#     races[cell_y][cell_x] = 0
-#
-# for _ in range(NUM_CELLS_PER_RACE):
-#     cell_x = np.random.randint(max(0, GREEN_START_POINT[0] - 2), min(cols, GREEN_START_POINT[0] + 3))
-#     cell_y = np.random.randint(max(0, GREEN_START_POINT[1] - 2), min(rows, GREEN_START_POINT[1] + 3))
-#     field[cell_y][cell_x] = 1
-#     races[cell_y][cell_x] = 1
 
-#
+### Размер квадрата расы при поялении
+CELLS_SQUARE_SIZE = 10
+
+## Установка начальных точек и клеток для каждой расы
+# field[YELLOW_START_POINT[1]][YELLOW_START_POINT[0]] = 1
+# field[GREEN_START_POINT[1]][GREEN_START_POINT[0]] = 1
+
+## Появление рас как квадратов в назначенных координатах (первый элем.)
 # for x in range(YELLOW_START_POINT[0], YELLOW_START_POINT[0] + CELLS_SQUARE_SIZE):
 #     for y in range(YELLOW_START_POINT[1], YELLOW_START_POINT[1] + CELLS_SQUARE_SIZE):
 #         field[y][x] = 1
@@ -142,29 +134,50 @@ field[GREEN_START_POINT[1]][GREEN_START_POINT[0]] = 1
 #         field[y][x] = 1
 #         races[y][x] = GREEN_RACE
 
-#field = [[0 for _ in range(width)] for _ in range(height)]
-#races = [[0 for _ in range(FIELD_WIDTH)] for _ in range(FIELD_HEIGHT)]
 
-# create random start points for each race
-NUMBER_OF_RACE_ANKLAVS = 5
-for z in range(NUMBER_OF_RACE_ANKLAVS):
-    YELLOW_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(0, cols//2 - CELLS_SQUARE_SIZE)]
-    GREEN_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(cols//2, cols - CELLS_SQUARE_SIZE)]
+## Появление NUMBER_OF_RACE_ANKLAVS рас как квадратов в рандомных координатах
+# NUMBER_OF_RACE_ANKLAVS = 5
+#
+# for z in range(NUMBER_OF_RACE_ANKLAVS):
+#     # create random start points for each race
+#     YELLOW_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(0, cols//2 - CELLS_SQUARE_SIZE)]
+#     GREEN_START_POINT = [np.random.randint(z * (rows//NUMBER_OF_RACE_ANKLAVS), (z + 1) * (rows//NUMBER_OF_RACE_ANKLAVS) - CELLS_SQUARE_SIZE), np.random.randint(cols//2, cols - CELLS_SQUARE_SIZE)]
+#
+#     # create the race squares
+#     for x in range(YELLOW_START_POINT[0], YELLOW_START_POINT[0] + CELLS_SQUARE_SIZE):
+#         for y in range(YELLOW_START_POINT[1], YELLOW_START_POINT[1] + CELLS_SQUARE_SIZE):
+#             field[y][x] = 1
+#             races[y][x] = YELLOW_RACE
+#
+#     for x in range(GREEN_START_POINT[0], GREEN_START_POINT[0] + CELLS_SQUARE_SIZE):
+#         for y in range(GREEN_START_POINT[1], GREEN_START_POINT[1] + CELLS_SQUARE_SIZE):
+#             field[y][x] = 1
+#             races[y][x] = GREEN_RACE
 
-    # create the race squares
-    for x in range(YELLOW_START_POINT[0], YELLOW_START_POINT[0] + CELLS_SQUARE_SIZE):
-        for y in range(YELLOW_START_POINT[1], YELLOW_START_POINT[1] + CELLS_SQUARE_SIZE):
-            field[y][x] = 1
-            races[y][x] = YELLOW_RACE
+### Число рандомно появляющихся клеток для каждой расы
+NUMBER_OF_CELLS_PER_RACE = 400
 
-    for x in range(GREEN_START_POINT[0], GREEN_START_POINT[0] + CELLS_SQUARE_SIZE):
-        for y in range(GREEN_START_POINT[1], GREEN_START_POINT[1] + CELLS_SQUARE_SIZE):
-            field[y][x] = 1
-            races[y][x] = GREEN_RACE
+i = 0
+while i < NUMBER_OF_CELLS_PER_RACE:
+    row = np.random.randint(0, rows // 2)
+    col = np.random.randint(0, cols)
+    if(field[row][col] == 0):
+        field[row][col] = 1
+        races[row][col] = YELLOW_RACE
+        i += 1
+
+i = 0
+while i < NUMBER_OF_CELLS_PER_RACE:
+    row = np.random.randint(rows // 2, rows)
+    col = np.random.randint(0, cols)
+    if(field[row][col] == 0):
+        field[row][col] = 1
+        races[row][col] = GREEN_RACE
+        i += 1
 
 # Основной цикл игры
 running = True
-# clock = pygame.time.Clock()  # Создаем объект Clock для управления FPS
+clock = pygame.time.Clock()  # Создаем объект Clock для управления FPS
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -173,7 +186,7 @@ while running:
     draw_field()
     update_field()
     pygame.display.update()
-    # clock.tick(1)  # Устанавливаем максимальное количество кадров в секунду
+    clock.tick(9)  # Устанавливаем максимальное количество кадров в секунду
     time.sleep(0.1)
 
 pygame.quit()
