@@ -38,12 +38,16 @@ GREEN_START_POINT = [30, 35]
 
 # Определение коэффэциентов
 ## Коэффициент вероятности рождения
-k1 = 2
-k2 = 1
+YELLOW_NEARS_REL_KOEF = 1
+YELLOW_FARS_REL_KOEF = 0.5
+GREEN_NEARS_REL_KOEF = 0.9
+GREEN_FARS_REL_KOEF = 0.5
 
 ## Коэффициенты интервала рождаемости
-k3_min = 10
-k3_max = 20
+YELLOW_MIN_FOR_BORN = 5
+YELLOW_MAX_FOR_BORN = 10
+GREEN_MIN_FOR_BORN = 5
+GREEN_MAX_FOR_BORN = 10
 
 # Функция для рисования поля с учетом рас
 def draw_field():
@@ -67,26 +71,26 @@ def update_field():
         for y in range(rows):
             count_yellow, count_green = count_neighbors(x, y)
             if field[y][x] == 1:
-                if races[y][x] == GREEN_RACE:  # Если клетка желтая
+                if races[y][x] == GREEN_RACE:
                     if count_yellow > count_green:
                         new_field[y][x] = 1
                         races[y][x] = YELLOW_RACE
-                    elif count_green < k3_min or count_green > k3_max:
+                    elif count_green < GREEN_MIN_FOR_BORN or count_green > GREEN_MAX_FOR_BORN:
                         new_field[y][x] = 0
                         races[y][x] = NO_RACE
                 else:
                     if count_green > count_yellow:
                         new_field[y][x] = 1
                         races[y][x] = GREEN_RACE
-                    elif count_yellow < k3_min or count_yellow > k3_max:
+                    elif count_yellow < YELLOW_MIN_FOR_BORN or count_yellow > YELLOW_MAX_FOR_BORN:
                         new_field[y][x] = 0
                         races[y][x] = NO_RACE
             else:
                 if(count_green == 0 or count_yellow == 0):
-                    if (count_green >= k3_min and count_green <= k3_max):
+                    if (count_green >= GREEN_MIN_FOR_BORN and count_green <= GREEN_MAX_FOR_BORN):
                         new_field[y][x] = 1
                         races[y][x] = GREEN_RACE
-                    elif(count_yellow >= k3_min and count_yellow <= k3_max):
+                    elif(count_yellow >= YELLOW_MIN_FOR_BORN and count_yellow <= YELLOW_MAX_FOR_BORN):
                         new_field[y][x] = 1
                         races[y][x] = YELLOW_RACE
                 elif count_yellow > count_green:
@@ -108,10 +112,13 @@ def count_neighbors(x, y):
         for j in range(-2, 3):
             col = (x + i + cols) % cols
             row = (y + j + rows) % rows
-            k = k2 if (abs(i) % 2 == 0 or abs(j) % 2 == 0) and i + j != 0 else k1
             if races[row][col] == YELLOW_RACE:
+                k = YELLOW_FARS_REL_KOEF if (abs(i) % 2 == 0 or abs(
+                    j) % 2 == 0) and i + j != 0 else YELLOW_NEARS_REL_KOEF
                 count_yellow += k * field[row][col]
             elif races[row][col] == GREEN_RACE:
+                k = GREEN_FARS_REL_KOEF if (abs(i) % 2 == 0 or abs(
+                    j) % 2 == 0) and i + j != 0 else GREEN_NEARS_REL_KOEF
                 count_green += k * field[row][col]
     return count_yellow, count_green
 
@@ -155,7 +162,7 @@ CELLS_SQUARE_SIZE = 10
 #             races[y][x] = GREEN_RACE
 
 ### Число рандомно появляющихся клеток для каждой расы
-NUMBER_OF_CELLS_PER_RACE = 400
+NUMBER_OF_CELLS_PER_RACE = 700
 
 i = 0
 while i < NUMBER_OF_CELLS_PER_RACE:
@@ -177,7 +184,6 @@ while i < NUMBER_OF_CELLS_PER_RACE:
 
 # Основной цикл игры
 running = True
-clock = pygame.time.Clock()  # Создаем объект Clock для управления FPS
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -186,7 +192,6 @@ while running:
     draw_field()
     update_field()
     pygame.display.update()
-    clock.tick(9)  # Устанавливаем максимальное количество кадров в секунду
     time.sleep(0.1)
 
 pygame.quit()
